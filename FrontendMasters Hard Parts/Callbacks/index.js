@@ -79,14 +79,14 @@ var add = function(a, b) {
 function intersection(...arrays) {
   return reduce(
     arrays,
-    function(a, b) {
-      let result = [];
-      for (let item of a) {
-        if (b.indexOf(item) !== -1) {
-          result.push(item);
+    (firstArray, secondArray) => {
+      let resultArray = [];
+      for (let item of firstArray) {
+        if (secondArray.includes(item)) {
+          resultArray.push(item);
         }
       }
-      return result;
+      return resultArray;
     },
     arrays[0]
   );
@@ -96,14 +96,32 @@ function intersection(...arrays) {
 // should log: [5, 15]
 
 //Extension 4
+// function union(...arrays) {
+//   let result = [];
+//   return reduce(
+//     arrays,
+//     function(a, b) {
+//       for (let item of b) {
+//         // second condition to prevent duplicated values in a single array
+//         if (a.indexOf(item) == -1 && result.indexOf(item) == -1) {
+//           result.push(item);
+//         }
+//       }
+//       return result;
+//     },
+//     []
+//   );
+// }
+///////////////////////
+// variant using includes()
+//////////////////////
 function union(...arrays) {
   let result = [];
   return reduce(
     arrays,
-    function(a, b) {
-      for (let item of b) {
-        // second condition to prevent duplicated values in a single array
-        if (a.indexOf(item) == -1 && result.indexOf(item) == -1) {
+    (firstArray, secondArray) => {
+      for (let item of secondArray) {
+        if (!firstArray.includes(item) && !result.includes(item)) {
           result.push(item);
         }
       }
@@ -117,13 +135,26 @@ function union(...arrays) {
 // should log: [5, 10, 15, 88, 1, 7, 100]
 
 //Extension 5
+// function objOfMatches(array1, array2, callback) {
+//   let obj = {};
+//   for (let i = 0; i < array1.length; i++) {
+//     if (callback(array1[i]) === array2[i]) {
+//       obj[array1[i]] = array2[i];
+//     }
+//   }
+//   return obj;
+// }
+
+///////////////////////
+// variant using map method
+//////////////////////
 function objOfMatches(array1, array2, callback) {
   let obj = {};
-  for (let i = 0; i < array1.length; i++) {
-    if (callback(array1[i]) === array2[i]) {
-      obj[array1[i]] = array2[i];
+  array1.map((item, index) => {
+    if (callback(item) === array2[index]) {
+      obj[item] = array2[index];
     }
-  }
+  });
   return obj;
 }
 
@@ -135,16 +166,29 @@ function objOfMatches(array1, array2, callback) {
 // should log: { hi: 'HI', bye: 'BYE', later: 'LATER' }
 
 //Extension 6
+// function multiMap(arrVals, arrCallbacks) {
+//   let obj = {};
+//   let evaluatedArray;
+//   for (let item of arrVals) {
+//     evaluatedArray = [];
+//     for (let callback of arrCallbacks) {
+//       evaluatedArray.push(callback(item));
+//     }
+//     obj[item] = evaluatedArray;
+//   }
+//   return obj;
+// }
+
+// emhhhhh map try, not sure :)
 function multiMap(arrVals, arrCallbacks) {
   let obj = {};
-  let evaluatedArray;
-  for (let item of arrVals) {
-    evaluatedArray = [];
+  arrVals.map((item, index) => {
+    let evaluatedArray = [];
     for (let callback of arrCallbacks) {
       evaluatedArray.push(callback(item));
     }
     obj[item] = evaluatedArray;
-  }
+  });
   return obj;
 }
 
