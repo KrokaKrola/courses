@@ -3,7 +3,7 @@
 
 // Challenge 1
 function addTwo(num) {
-  return num + 2;
+    return num + 2;
 }
 
 // To check if you've completed it, uncomment these console.logs!
@@ -12,7 +12,7 @@ function addTwo(num) {
 
 // Challenge 2
 function addS(word) {
-  return word + "s";
+    return word + "s";
 }
 
 // uncomment these to check your work
@@ -21,11 +21,11 @@ function addS(word) {
 
 // Challenge 3
 function map(array, callback) {
-  const result = [];
-  for (let item of array) {
-    result.push(callback(item));
-  }
-  return result;
+    const result = [];
+    for (let item of array) {
+        result.push(callback(item));
+    }
+    return result;
 }
 
 // console.log(map([1, 2, 3], addTwo));
@@ -33,13 +33,13 @@ let alphabet = "";
 const letters = ["a", "b", "c", "d"];
 // Challenge 4
 function forEach(array, callback) {
-  for (let item of array) {
-    callback(item);
-  }
+    for (let item of array) {
+        callback(item);
+    }
 }
 
-forEach(letters, function(char) {
-  alphabet += char;
+forEach(letters, function (char) {
+    alphabet += char;
 });
 // console.log(alphabet);
 
@@ -51,45 +51,45 @@ forEach(letters, function(char) {
 
 //Extension 1
 function mapWith(array, callback) {
-  const result = [];
-  forEach(array, item => {
-    result.push(callback(item));
-  });
-  return result;
+    const result = [];
+    forEach(array, item => {
+        result.push(callback(item));
+    });
+    return result;
 }
 
 // console.log(mapWith([1, 2, 3], addTwo));
 
 //Extension 2
 function reduce(array, callback, initialValue = array[0]) {
-  let accum = initialValue;
-  for (let item of array) {
-    accum = callback(accum, item);
-  }
-  return accum;
+    let accum = initialValue;
+    for (let item of array) {
+        accum = callback(accum, item);
+    }
+    return accum;
 }
 
 var nums = [4, 1, 3];
-var add = function(a, b) {
-  return a + b;
+var add = function (a, b) {
+    return a + b;
 };
 // console.log(reduce(nums, add, 0));
 
 //Extension 3
 function intersection(...arrays) {
-  return reduce(
-    arrays,
-    (firstArray, secondArray) => {
-      let resultArray = [];
-      for (let item of firstArray) {
-        if (secondArray.includes(item)) {
-          resultArray.push(item);
-        }
-      }
-      return resultArray;
-    },
-    arrays[0]
-  );
+    return reduce(
+        arrays,
+        (firstArray, secondArray) => {
+            let resultArray = [];
+            for (let item of firstArray) {
+                if (secondArray.includes(item)) {
+                    resultArray.push(item);
+                }
+            }
+            return resultArray;
+        },
+        arrays[0]
+    );
 }
 
 // console.log(intersection([5, 10, 15, 20], [15, 88, 1, 5, 7], [1, 10, 15, 5, 20]));
@@ -116,19 +116,35 @@ function intersection(...arrays) {
 // variant using includes()
 //////////////////////
 function union(...arrays) {
-  let result = [];
-  return reduce(
-    arrays,
-    (firstArray, secondArray) => {
-      for (let item of secondArray) {
-        if (!firstArray.includes(item) && !result.includes(item)) {
-          result.push(item);
+    let result = [];
+    return reduce(
+        arrays,
+        (firstArray, secondArray) => {
+            for (let item of secondArray) {
+                if (!firstArray.includes(item) && !result.includes(item)) {
+                    result.push(item);
+                }
+            }
+            return result;
+        },
+        []
+    );
+}
+
+/////////////////////
+// another variant using includes
+/////////////////////
+
+//Extension 4
+function union(...arrays) {
+    return reduce(arrays, (a, b) => {
+        for (let item of b) {
+            if (!a.includes(item)) {
+                a.push(item);
+            }
         }
-      }
-      return result;
-    },
-    []
-  );
+        return a;
+    }, [])
 }
 
 // console.log(union([5, 10, 15, 10], [15, 88, 1, 5, 7], [100, 15, 10, 1, 5]));
@@ -149,13 +165,13 @@ function union(...arrays) {
 // variant using map method
 //////////////////////
 function objOfMatches(array1, array2, callback) {
-  let obj = {};
-  array1.map((item, index) => {
-    if (callback(item) === array2[index]) {
-      obj[item] = array2[index];
-    }
-  });
-  return obj;
+    let obj = {};
+    array1.map((item, index) => {
+        if (callback(item) === array2[index]) {
+            obj[item] = array2[index];
+        }
+    });
+    return obj;
 }
 
 // console.log(
@@ -179,17 +195,17 @@ function objOfMatches(array1, array2, callback) {
 //   return obj;
 // }
 
-// emhhhhh map try, not sure :)
+// trying map
 function multiMap(arrVals, arrCallbacks) {
-  let obj = {};
-  arrVals.map((item, index) => {
-    let evaluatedArray = [];
-    for (let callback of arrCallbacks) {
-      evaluatedArray.push(callback(item));
-    }
-    obj[item] = evaluatedArray;
-  });
-  return obj;
+    let obj = {};
+    arrVals.map((item, index) => {
+        let evaluatedArray = [];
+        for (let callback of arrCallbacks) {
+            evaluatedArray.push(callback(item));
+        }
+        obj[item] = evaluatedArray;
+    });
+    return obj;
 }
 
 // console.log(
