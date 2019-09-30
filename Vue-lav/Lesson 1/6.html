@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>6</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="sample">
+            <input type="text" v-model="firstName">
+            <hr>
+            <input type="text" v-model="lastName">
+            <hr>
+            <input type="text" v-model="promo">
+            <hr>
+            <h2>Hello, {{ fullName }}</h2>
+            <hr>
+            <button class="btn btn-success" @click="showText=!showText">ToggleText</button>
+            <div v-show="showText">Your sale is {{ sale }} %</div>
+        </div>
+
+        <script>
+
+            function getSale(code) {
+                let codes = {
+                    newYear: 10,
+                    some: 20
+                };
+                let sale = (codes[code] !== undefined) ? codes[code] : 0;
+                return sale;
+            }
+
+            new Vue({
+                el: '.sample',
+                data: {
+                    firstName: "",
+                    lastName: "",
+                    promo: "",
+                    showText: true
+                },
+                computed: {
+                    fullName() {
+                        return this.firstName + " " + this.lastName;
+                    },
+                    sale() {
+                        return getSale(this.promo);
+                    }
+                }
+            });
+
+        </script>
+
+</body>
+
+</html>
