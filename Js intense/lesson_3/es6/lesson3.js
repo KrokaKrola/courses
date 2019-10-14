@@ -78,28 +78,45 @@ PromiseApi.userReg()
                 console.log(e.msg);
            });
 */
+/* 
+import 'babel-polyfill';
+
+import * as AsyncApi from './lesson3/api-async';
+
+AsyncApi.userReg()
+    .then((regRes) => {
+        console.log(regRes);
+        return AsyncApi.userAuth(regRes.id);
+    })
+    .then((authRes) => {
+        console.log(authRes);
+        return AsyncApi.userData(authRes.token);
+    })
+    .then((dataRes) => {
+        console.log(dataRes);
+    })
+    .catch((e) => {
+        console.log(e.msg);
+    });
+ */
+// async function UserProccess(){
+//     let regRes = await AsyncApi.userReg();
+//     console.log(regRes);
+
+//     let authRes = await AsyncApi.userAuth(regRes.id);
+//     console.log(authRes);
+
+//     let dataRes = await AsyncApi.userData(authRes.token);
+//     console.log(dataRes);
+
+//     return dataRes.data;
+// }
+
+// UserProccess().then((data) => {
+//     console.log(data);
+// }).catch((err) => {
+//     console.log(err.message);
+// });
 
 import "babel-polyfill";
-
-import * as AsyncApi from "./lesson3/api-async";
-
-async function UserProccess() {
-  let regRes = await AsyncApi.userReg();
-  console.log(regRes);
-
-  let authRes = await AsyncApi.userAuth(regRes.id);
-  console.log(authRes);
-
-  let dataRes = await AsyncApi.userData(authRes.token);
-  console.log(dataRes);
-
-  return dataRes.data;
-}
-
-UserProccess()
-  .then(data => {
-    console.log(data);
-  })
-  .catch(err => {
-    console.log(err.message);
-  });
+import "./lesson3/main";
