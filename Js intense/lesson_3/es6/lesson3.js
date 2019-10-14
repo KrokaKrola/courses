@@ -1,38 +1,122 @@
-// let path = require('path');
+/*
+import * as BadApi from './lesson3/api-callback';
 
-import * as badApi from "./lesson3/api-callback";
+import {mathOp} from './lesson3/math';
 
-badApi.userReg((res) => {
+function mathRun(){
+    try{
+        let a = mathOp(1, 2, '+') + mathOp(1, parseInt(Math.random() * 2), '/');
+        console.log(a);
+        return a;
+    }
+    catch(e){
+        console.log(e.message);
+        console.log(e.stack);
+    }
+    finally{
+        console.log('math finnaly');
+    }
+
+    console.log('math done');
+}
+
+mathRun();
+
+
+let some = new Promise(function(resolve, reject){
+    window.setTimeout(() => {
+        let num = Math.random();
+        num > 0.5 ? resolve(num) : reject(`${num} less than 0.5`);
+    }, 200);
+    
+});
+
+console.log(some)
+
+some.then((res) => {
+    console.log('good! ' + res);
+}, (err) => {
+    console.log(err);
+});
+
+
+BadApi.userReg((res) => {
     console.log(res);
-    badApi.userAuth(res.id, (resAuth) => {
+
+    BadApi.userAuth(res.id, (resAuth) => {
         console.log(resAuth);
-        badApi.userData(resAuth.token, (resData) => {
+
+        BadApi.userData(resAuth.token, (resData) => {
             console.log(resData);
         }, (e) => {
-            console.log(e);
+            console.log(e.msg);
         })
     }, (e) => {
         console.log(e.msg);
     });
 }, (e) => {
-    console.log(e.msg)
+    console.log(e.msg);
 });
 
-import {
-    mathOp
-} from './lesson3/math';
+*/
+/*
+import * as PromiseApi from './lesson3/api-promise';
 
-function mathRun() {
-    try {
-        let a = mathOp(1, 2, '+') + mathOp(1, 2, '/');
-        console.log(a);
-        return a;
-    } catch (e) {
-        console.error(e);
-    } finally {
-        console.log('math finaly');
-    }
-    console.log('math done')
-}
+PromiseApi.userReg()
+          .then((regRes) => {
+                console.log(regRes);
+                return PromiseApi.userAuth(regRes.id);
+           })
+           .then((authRes) => {
+                console.log(authRes);
+                return PromiseApi.userData(authRes.token);
+           })
+           .then((dataRes) => {
+                console.log(dataRes);
+           })
+           .catch((e) => {
+                console.log(e.msg);
+           });
+*/
+/* 
+import 'babel-polyfill';
 
-mathRun();
+import * as AsyncApi from './lesson3/api-async';
+
+AsyncApi.userReg()
+    .then((regRes) => {
+        console.log(regRes);
+        return AsyncApi.userAuth(regRes.id);
+    })
+    .then((authRes) => {
+        console.log(authRes);
+        return AsyncApi.userData(authRes.token);
+    })
+    .then((dataRes) => {
+        console.log(dataRes);
+    })
+    .catch((e) => {
+        console.log(e.msg);
+    });
+ */
+// async function UserProccess(){
+//     let regRes = await AsyncApi.userReg();
+//     console.log(regRes);
+
+//     let authRes = await AsyncApi.userAuth(regRes.id);
+//     console.log(authRes);
+
+//     let dataRes = await AsyncApi.userData(authRes.token);
+//     console.log(dataRes);
+
+//     return dataRes.data;
+// }
+
+// UserProccess().then((data) => {
+//     console.log(data);
+// }).catch((err) => {
+//     console.log(err.message);
+// });
+
+import 'babel-polyfill';
+import "./lesson3/main";
