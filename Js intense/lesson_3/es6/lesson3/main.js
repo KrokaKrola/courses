@@ -1,7 +1,8 @@
-import * as ArticlesModel from './articles';
+import * as ArticlesModel from "./articles";
 
-ArticlesModel.all((articles) => {
-    console.log('articles count = ' + articles.length);
+ArticlesModel.all(
+  articles => {
+    console.log("articles count = " + articles.length);
 
     // // берём случайный индекс
     // let ind = Math.floor(Math.random() * articles.length);
@@ -28,13 +29,13 @@ ArticlesModel.all((articles) => {
     // }, (error) => {
     //     console.log(error + ' in articles one');
     // });
+  },
+  error => {
+    console.log(error + " in articles list");
+  }
+);
 
-}, (error) => {
-    console.log(error + ' in articles list');
-});
-
-
-import * as ArticlesModelAsync from './articles-async';
+import * as ArticlesModelAsync from "./articles-async";
 
 // ArticlesModelAsync.all().then((articles) => {
 //     console.log("---------------------------------------")
@@ -55,17 +56,20 @@ import * as ArticlesModelAsync from './articles-async';
 // });
 
 async function init() {
-    let articles = await ArticlesModelAsync.all();
-    let ind = Math.floor(Math.random() * articles.length);
-    let article = await ArticlesModelAsync.one(articles[ind].id);
-    await ArticlesModelAsync.remove(article.id);
-    articles = await ArticlesModelAsync.all();
-    return articles;
+  let articles = await ArticlesModelAsync.all();
+  console.log(articles);
+  let ind = Math.floor(Math.random() * articles.length);
+  let article = await ArticlesModelAsync.one(articles[ind].id);
+  console.log(article);
+  await ArticlesModelAsync.remove(article.id);
+  articles = await ArticlesModelAsync.all();
+  return articles;
 }
 
-init().then((result) => {
+init()
+  .then(result => {
     console.log(result);
-}).
-catch((err) => {
-    console.log(err.msg);
-});
+  })
+  .catch(err => {
+    console.log(err.message);
+  });
