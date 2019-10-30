@@ -47,7 +47,11 @@ export function remove(id) {
 function TimeoutPropabiliry(time, probability) {
   return new Promise((resolve, reject) => {
     window.setTimeout(() => {
-      Math.random() < probability ? resolve() : reject();
+      Math.random() < probability
+        ? resolve()
+        : reject({
+            message: 'propability error'
+          });
     }, time);
   });
 }

@@ -118,5 +118,5 @@ AsyncApi.userReg()
 //     console.log(err.message);
 // });
 
-import 'babel-polyfill';
+import "babel-polyfill";
 import "./lesson3/main";
