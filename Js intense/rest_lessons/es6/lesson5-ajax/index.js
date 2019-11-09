@@ -11,16 +11,17 @@ async function testArticlesModel() {
   // получаем статью по id
   let article = await ArticlesModel.one(articles[ind].id);
   console.log(article);
+  //добавляем статью передавая title и content
+  // let testTime = new Date();
+  // let addArtcile = await ArticlesModel.add({
+  //   title: `Created - ${testTime.getHours()}:${testTime.getMinutes()}:${testTime.getSeconds()}`,
+  //   content: `lorem lorem lorem lorem : ${articles[ind].id}`
+  // });
 
-  let addArtcile = await ArticlesModel.add({
-    'title': 'test',
-    'content': 'test_content'
-  });
+  // console.log(addArtcile);
 
-  console.log(addArtcile);
-
-  let articlesNew = await ArticlesModel.all();
-  console.log(articlesNew);
+  // let articlesNew = await ArticlesModel.all();
+  // console.log(articlesNew);
   /*
 
     let removeRes = await ArticlesModel.remove(article.id);

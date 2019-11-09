@@ -1,17 +1,16 @@
 export async function all() {
   let articles = await makeRequest('/api/', {
     headers: {
-      'Autorization': 'test'
+      Autorization: 'test'
     }
   });
   return articles;
 }
 
-
 export async function one(id) {
   let article = await makeRequest(`/api/?id=${id}`, {
     headers: {
-      'Autorization': 'test'
+      Autorization: 'test'
     }
   });
 
@@ -20,15 +19,13 @@ export async function one(id) {
 
 export async function add(data) {
   let formData = new FormData();
-  for(let key in data) {
-    console.log(data[key]);
+  for (let key in data) {
     formData.append(key, data[key]);
   }
-  console.log(formData);
   let article = await makeRequest(`/api/`, {
     method: 'POST',
     headers: {
-      'Autorization': 'test'
+      Autorization: 'test'
     },
     body: formData
   });
@@ -36,15 +33,12 @@ export async function add(data) {
   return article;
 }
 
-
-function makeRequest(url, settings) {
-  return fetch(url, settings).then((response) => {
-    if(response.status !== 200) {
-      return response.text().then((text) => {
-        throw new Error(text);
-      })
-    }
-
-    return response.json();
-  })
+async function makeRequest(url, settings) {
+  const response = await fetch(url, settings);
+  if (response.status !== 200) {
+    return response.text().then(text => {
+      throw new Error(text);
+    });
+  }
+  return response.json();
 }
