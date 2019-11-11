@@ -22,6 +22,10 @@ export async function remove(id) {
   return response.data;
 }
 
+function test() {
+  
+}
+
 export async function add(article) {
   let formData = new FormData();
 
