@@ -1,0 +1,45 @@
+.App {
+  text-align: center;
+  padding: 40px;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.cardButtons {
+  justify-content: center;
+}
+
+.cardsContainer {
+  /* margin: 0!important; */
+}
+
+.footerGrid {
+  margin-top: 30px;
+}
+
+.footerGrid > div {
+  margin-right: 15px;
+}
+
+.header {
+  margin-bottom: 30px;
+}
