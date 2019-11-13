@@ -13,6 +13,8 @@ import CopyIcon from '@material-ui/icons/FileCopy';
 import { observer } from 'mobx-react';
 
 import HeaderModel from '../../store/header';
+import ContentModel from '../../store/content';
+import SiteModel from '../../store/site';
 
 export default
 @observer
@@ -40,10 +42,27 @@ class extends Component {
               }}>
               <AddIcon />
             </Fab>
-            <Fab size='small' color='primary' aria-label='edit'>
+            <Fab
+              size='small'
+              color='primary'
+              aria-label='edit'
+              onClick={() => {
+                SiteModel.changeModalState(
+                  this.props.id,
+                  this.props.header,
+                  this.props.content,
+                  this.props.cost
+                );
+              }}>
               <EditIcon />
             </Fab>
-            <Fab size='small' color='default' aria-label='copy'>
+            <Fab
+              size='small'
+              color='default'
+              aria-label='copy'
+              onClick={() => {
+                ContentModel.addCopy(this.props.id);
+              }}>
               <CopyIcon />
             </Fab>
             <Fab

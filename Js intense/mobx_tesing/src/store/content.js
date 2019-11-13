@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 class Content {
   @observable list = [
@@ -32,7 +32,6 @@ class Content {
     }
   ];
 
-
   @computed get map() {
     let map = {};
     this.list.forEach((item, i) => {
@@ -45,6 +44,16 @@ class Content {
     return id => this.list[this.map[id]];
   }
 
+  @action remove(id) {
+    this.list.splice(this.map[id], 1);
+  }
+
+  @action addCopy(id) {
+    let newItem = {...this.list[this.map[id]]};
+    newItem.id = Math.round(Math.random() * 1000);
+    newItem.date = new Date().toISOString();
+    this.list.push(newItem);
+  }
 }
 
 export default new Content();

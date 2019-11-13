@@ -4,7 +4,7 @@ import { observable, computed, action } from 'mobx';
 import ContentModel from './content';
 
 class Header {
-  @observable idEssences = [];
+  @observable idEssences = [1001, 1002, 1003];
 
   @computed get totalAmount() {
     return this.idEssences.length;
@@ -23,7 +23,7 @@ class Header {
     }, {});
 
     let result = [];
-    for(let item in countTypeObject) {
+    for (let item in countTypeObject) {
       result.push(`${countTypeObject[item]} of ${ContentModel.item(item).type}`);
     }
 
@@ -34,12 +34,18 @@ class Header {
     this.idEssences.push(id);
   }
 
-
   @action remove(id) {
     let index = this.idEssences.indexOf(id);
-    if(index !== -1) {
+    if (index !== -1) {
       this.idEssences.splice(index, 1);
+    } else {
+      ContentModel.remove(id);
     }
+  }
+
+  @action resetAll() {
+    this.idEssences = [];
+    ContentModel.list = [];
   }
 }
 
