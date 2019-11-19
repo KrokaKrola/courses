@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export function Author({ author }) {
   return (
@@ -9,3 +10,9 @@ export function Author({ author }) {
   );
 }
 
+Author.propTypes = {
+  author: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    handle: PropTypes.string.isRequired
+  }).isRequired
+}

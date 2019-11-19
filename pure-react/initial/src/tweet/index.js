@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import { Tweet } from '.';
+import { Tweet } from './Tweet';
 
 const data = {
   message: 'Lorem ipsum dolor sit amet.',

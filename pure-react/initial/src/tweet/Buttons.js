@@ -1,6 +1,8 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faReply, faRetweet, faHeart, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
+
 function showCount(count) {
   return count > 0 ? count : '';
 }
@@ -17,6 +19,9 @@ export const RetweetButton = ({ count }) => {
     </span>
   );
 };
+RetweetButton.propTypes = {
+  count: PropTypes.number.isRequired
+};
 
 export const LikeButton = ({ count }) => {
   return (
@@ -25,6 +30,9 @@ export const LikeButton = ({ count }) => {
       <span className='like-count'>{showCount(count)}</span>
     </span>
   );
+};
+LikeButton.propTypes = {
+  count: PropTypes.number.isRequired
 };
 
 export const MoreOptionsButton = () => {
