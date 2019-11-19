@@ -1,48 +1,67 @@
-.tweet {
-  border: 1px solid #ccc;
-  width: 564px;
-  min-height: 68px;
+html,
+body,
+#root,
+.app,
+.body {
+  height: 100%;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+.app {
+  font-family: 'Open Sans', sans-serif;
+}
+.nav {
+  background: #fff4ca;
+  border-bottom: 2px solid #ffd31f;
   padding: 10px;
   display: flex;
-  font-family: "Helvetica", arial, sans-serif;
-  font-size: 14px;
-  line-height: 18px;
+  justify-content: flex-end;
 }
-
-.avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 5px;
+.body {
+  display: flex;
+  padding: 10px;
+  height: calc(100% - 57px);
+  background-color: #fff;
+  box-sizing: border-box;
+}
+.sidebar {
+  border: 2px solid #1f73ff;
   margin-right: 10px;
+  background: #cbdfff;
+  max-height: 120px;
+  flex-basis: 120px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.name {
-  font-weight: bold;
-  margin-bottom: 0.5em;
-  margin-right: 0.3em;
+.sidebar .stats {
+  text-transform: lowercase;
+  font-size: 12px;
 }
-
-.handle {
-  color: #8899a6;
-  font-size: 13px;
+.content {
+  padding: 10px;
+  border: 2px solid #8bc34a;
+  background-color: #f1f8e9;
+  flex: 1;
 }
-
-.time {
-  padding-left: 0.3em;
-  color: #8899a6;
+.user-avatar {
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
 }
-
-.time::before {
-  content: "\00b7";
-  padding-right: 0.3em;
+.user-avatar.small {
+  width: 32px;
+  height: 32px;
 }
-
-.buttons {
-  margin-top: 10px;
-  margin-left: 2px;
-  font-size: 1.4em;
-  color: #aab8c2;
+.user-stats {
+  width: 100%;
 }
-.buttons > * {
-  margin-right: 20px;
+.user-stats > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 10px;
 }
