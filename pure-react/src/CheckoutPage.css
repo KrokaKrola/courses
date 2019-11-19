@@ -1,0 +1,12 @@
+.field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-group label {
+  margin-bottom: 10px;
+}
+
+.field-group {
+  max-width: 300px;
+}

@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import NavBar from './NavBar';
-import ItemPage from './ItemPage'
-import "./index.css";
-import "./App.css";
+import './index.css';
+import './App.css';
+import ItemPage from './ItemPage';
+import { CartPage } from './CartPage';
+import CheckoutPage from './CheckoutPage';
 
 const products = [
   { id: 1, name: 'Phone', price: 299 },
@@ -12,15 +14,39 @@ const products = [
   { id: 4, name: 'Camera', price: 799 }
 ];
 
-const App = () => {
-  return (
-    <div className="App">
-      <NavBar />
-      <main>
-        <ItemPage items={products} />
-      </main>
-    </div>
-  )
+class App extends React.Component {
+  state = {
+    activePage: 'store',
+    cart: []
+  };
+
+  handleAdd = item => {
+    this.setState(prev => ({
+      cart: [...prev.cart, item]
+    }));
+  };
+
+  handlePageChange = page => {
+    this.setState({ activePage: page });
+  };
+
+  render() {
+    const { activePage, cart } = this.state;
+    return (
+      <div className='App'>
+        <NavBar onPageChange={this.handlePageChange} cartCount={cart.length} />
+        <main>
+          {activePage === 'store' ? (
+            <ItemPage items={products} onAddToCart={this.handleAdd} />
+          ) : activePage === 'cart' ? (
+            <CartPage items={cart} onPageChange={this.handlePageChange} />
+          ) : (
+            <CheckoutPage items={cart} />
+          )}
+        </main>
+      </div>
+    );
+  }
 }
 
 ReactDOM.render(<App />, document.querySelector('#root'));

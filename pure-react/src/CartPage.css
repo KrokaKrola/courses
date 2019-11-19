@@ -1,5 +1,5 @@
 .CartPage-items {
-  margin: 0;
+  margin: 0 0 1em 0;
   padding: 0;
 }
 .CartPage-items li {
@@ -20,4 +20,23 @@
 }
 .CartItem-removeOne {
   border-right: none;
+}
+
+.CartPage .total {
+  text-align: right;
+  margin-right: 10px;
+}
+
+.CartPage button {
+  background-color: green;
+  color: #fff;
+  box-shadow: none;
+  outline: none;
+  border: none;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  font-weight: bold;
 }

@@ -11,6 +11,8 @@
   padding: 0;
   margin: 0;
   list-style-type: none;
+  display: flex;
+  justify-content: space-between;
 }
 .App-nav button {
   font-size: 18px;
@@ -37,4 +39,14 @@
 
 .App main {
   margin: 20px;
+}
+
+a, button {
+  transition: .2s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+a:hover, button:hover {
+  transform: scale(1.1);
 }
