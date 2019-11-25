@@ -1,5 +1,7 @@
 import React from 'react';
 import './App.css';
+import Search from './Search.js';
+import Table from './Table';
 
 const list = [
   {
@@ -20,15 +22,18 @@ const list = [
   }
 ];
 
+
 export default class extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      list
+      list,
+      searchTerm: ''
     };
 
     this.onDismiss = this.onDismiss.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
   }
 
   onDismiss(id) {
@@ -37,28 +42,16 @@ export default class extends React.Component {
     this.setState({ list: newList });
   }
 
+  onSearchChange(event) {
+    this.setState({ searchTerm: event.target.value });
+  }
+
   render() {
-    const { list } = this.state;
+    const { list, searchTerm } = this.state;
     return (
       <div className="App">
-        {list.map(item => (
-          <div key={item.objectID}>
-            <span>
-              <a href={item.url}>{item.title}</a>
-            </span>
-            <span> {item.author}</span>
-            <span>{item.num_comments}</span>
-            <span>{item.points}</span>
-            <span>
-              <button
-                onClick={() => this.onDismiss(item.objectID)}
-                type="button"
-              >
-                Dismiss
-              </button>
-            </span>
-          </div>
-        ))}
+        <Search searchTerm={searchTerm} onSearchChange={this.onSearchChange}>Search</Search>
+        <Table list={list} onDismiss={this.onDismiss} searchTerm={searchTerm} />
       </div>
     );
   }
