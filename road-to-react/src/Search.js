@@ -1,12 +1,11 @@
 import React from 'react';
 
-export default function Search(props) {
-  console.log(props);
-  const {onSearchChange, searchTerm, children} = props;
+export default ({ onSearchChange, searchTerm, onSearchSubmit, children }) => {
   return (
-    <form>
+    <form onSubmit={onSearchSubmit}>
       {children}
       <input type="text" onChange={onSearchChange} value={searchTerm} />
+      <button type="submit">{children}</button>
     </form>
   );
-}
+};

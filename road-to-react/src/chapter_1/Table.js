@@ -19,10 +19,10 @@ const smallColumn = {
   width: '10%'
 };
 
-export default function Table({ list, onDismiss }) {
+export default function Table({ list, onDismiss, searchTerm }) {
   return (
     <div className="table">
-      {list.map(item => (
+      {list.filter(isSearched(searchTerm)).map(item => (
         <div key={item.objectID} className="table-row">
           <span style={largeColumn}>
             <a href={item.url}>{item.title}</a>
