@@ -1,10 +1,10 @@
 import React from 'react';
 
-export default function Button({ onDismiss, objectID, children, className }) {
+export default function Button({ onClick, children, className }) {
   return (
     <button
       className={className}
-      onClick={() => onDismiss(objectID)}
+      onClick={() => onClick()}
       type="button"
     >
       {children}
