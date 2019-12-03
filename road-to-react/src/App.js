@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './App.css';
 import Search from './Search.js';
 import Table from './Table';
 import Button from './Button';
 
 const DEFAULT_QUERY = 'redux';
-const DEFAULT_HPP = '100';
+const DEFAULT_HPP = '10';
 
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
@@ -13,8 +14,8 @@ const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
 const PARAM_HPP = 'hitsPerPage=';
 
-const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}&${PARAM_PAGE}`;
-console.log(url);
+// const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}&${PARAM_PAGE}`;
+// console.log(url);
 
 export default class extends Component {
   constructor(props) {
@@ -23,14 +24,20 @@ export default class extends Component {
     this.state = {
       results: null,
       searchKey: '',
-      searchTerm: DEFAULT_QUERY
+      searchTerm: DEFAULT_QUERY,
+      error: null
     };
 
+    this.needToSearchTopStories = this.needToSearchTopStories.bind(this);
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
     this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
+  }
+
+  needToSearchTopStories(searchTerm) {
+    return !this.state.results[searchTerm];
   }
 
   setSearchTopStories(result) {
@@ -39,18 +46,19 @@ export default class extends Component {
     const oldHits =
       results && results[searchKey] ? results[searchKey].hits : [];
     const updatedHits = [...oldHits, ...hits];
-    console.log(oldHits, updatedHits);
-    this.setState({ ...results, [searchKey]: { hits: updatedHits, page } });
-    console.log(this.state);
+    this.setState({
+      results: { ...results, [searchKey]: { hits: updatedHits, page } }
+    });
   }
 
   fetchSearchTopStories(searchTerm, page = 0) {
-    fetch(
+    axios(
       `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`
     )
-      .then(response => response.json())
-      .then(result => this.setSearchTopStories(result))
-      .catch(error => error);
+      .then(result => this.setSearchTopStories(result.data))
+      .catch(error => {
+        this.setState({ error: new Error(error).message });
+      });
   }
 
   componentDidMount() {
@@ -59,14 +67,15 @@ export default class extends Component {
     this.fetchSearchTopStories(searchTerm);
   }
 
+
   onDismiss(id) {
-    const { result } = this.state;
+    const { searchKey, results } = this.state;
+    const { hits, page } = results[searchKey];
     const isNotId = item => item.objectID !== id;
-    const updatedHits = result.hits.filter(isNotId);
-    this.setState({ result: { ...result, hits: updatedHits } });
-    // this.setState({
-    //   result: Object.assign({}, this.state.result, { hits: updatedHits })
-    // });
+    const updatedHits = hits.filter(isNotId);
+    this.setState({
+      results: { ...results, [searchKey]: { hits: updatedHits, page } }
+    });
   }
 
   onSearchChange(event) {
@@ -77,18 +86,21 @@ export default class extends Component {
     event.preventDefault();
     const { searchTerm } = this.state;
     this.setState({ searchKey: searchTerm });
-    this.fetchSearchTopStories(searchTerm);
+    if (this.needToSearchTopStories(searchTerm)) {
+      this.fetchSearchTopStories(searchTerm);
+    }
   }
 
   render() {
-    const { searchTerm, results, searchKey } = this.state;
+    const { searchTerm, results, searchKey, error } = this.state;
     const page =
       (results && results[searchKey] && results[searchKey].page) || 0;
     const list =
-      (results && results[searchKey && results[searchKey].hits]) || [];
-      console.log(list);
+      (results && results[searchKey] && results[searchKey].hits) || [];
+    const test = '';
     return (
       <div className="page">
+        {test}
         <div className="interactions">
           <Search
             searchTerm={searchTerm}
@@ -98,7 +110,13 @@ export default class extends Component {
             Search
           </Search>
         </div>
+        {error ? (
+          <div className="interactions">
+            <p>{error}</p>
+          </div>
+        ) : (
           <Table list={list} onDismiss={this.onDismiss} />
+        )}
         <div className="interactions">
           <Button
             onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
@@ -110,3 +128,5 @@ export default class extends Component {
     );
   }
 }
+
+export { Button, Search, Table };

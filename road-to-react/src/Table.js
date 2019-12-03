@@ -1,12 +1,6 @@
 import React from 'react';
 import Button from './Button';
 
-function isSearched(searchTerm) {
-  return function(item) {
-    return item.title.toLowerCase().includes(searchTerm.toLowerCase());
-  };
-}
-
 const largeColumn = {
   width: '40%'
 };
@@ -32,7 +26,7 @@ export default function Table({ list, onDismiss }) {
           <span style={smallColumn}>{item.points}</span>
           <span style={smallColumn}>
             <Button
-              onDismiss={onDismiss}
+              onClick={onDismiss}
               objectID={item.objectID}
               className="button-inline"
             >
