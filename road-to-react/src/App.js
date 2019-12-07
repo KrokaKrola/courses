@@ -36,6 +36,21 @@ const Loading = () => {
 const withLoading = Component => ({ isLoading, ...rest }) =>
   isLoading ? <Loading /> : <Component {...rest}></Component>;
 
+// HOF
+const updateSearchTopStoriesState = (hits, page) => (prevState) => {
+  const { searchKey, results } = prevState;
+  const oldHits =
+    results && results[searchKey] ? results[searchKey].hits : [];
+  const updatedHits = [...oldHits, ...hits];
+  return {
+    results: {
+      ...results,
+      [searchKey]: { hits: updatedHits, page }
+    },
+    isLoading: false
+  }
+}
+
 const ButtonWithLoading = withLoading(Button);
 
 export default class extends Component {
@@ -47,9 +62,7 @@ export default class extends Component {
       searchKey: '',
       searchTerm: DEFAULT_QUERY,
       error: null,
-      isLoading: false,
-      sortKey: 'NONE',
-      isSortReverse: false
+      isLoading: false
     };
 
     this.needToSearchTopStories = this.needToSearchTopStories.bind(this);
@@ -58,13 +71,7 @@ export default class extends Component {
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
-    this.onSort = this.onSort.bind(this);
-  }
 
-  onSort(sortKey) {
-    const isSortReverse =
-      this.state.sortKey === sortKey && !this.state.isSortReverse;
-    this.setState({ sortKey, isSortReverse });
   }
 
   needToSearchTopStories(searchTerm) {
@@ -73,17 +80,7 @@ export default class extends Component {
 
   setSearchTopStories(result) {
     const { hits, page } = result;
-    const { searchKey, results } = this.state;
-    const oldHits =
-      results && results[searchKey] ? results[searchKey].hits : [];
-    const updatedHits = [...oldHits, ...hits];
-    this.setState({
-      results: {
-        ...results,
-        [searchKey]: { hits: updatedHits, page }
-      },
-      isLoading: false
-    });
+    this.setState(updateSearchTopStoriesState(hits, page))
   }
 
   fetchSearchTopStories(searchTerm, page = 0) {
@@ -132,9 +129,7 @@ export default class extends Component {
       results,
       searchKey,
       error,
-      isLoading,
-      sortKey,
-      isSortReverse
+      isLoading
     } = this.state;
     const page =
       (results && results[searchKey] && results[searchKey].page) || 0;
@@ -156,15 +151,12 @@ export default class extends Component {
             <p>{error}</p>
           </div>
         ) : (
-          <Table
-            list={list}
-            onDismiss={this.onDismiss}
-            sortKey={sortKey}
-            onSort={this.onSort}
-            sortsFunctions={SORTS}
-            isSortReverse={isSortReverse}
-          />
-        )}
+            <Table
+              list={list}
+              onDismiss={this.onDismiss}
+              sortsFunctions={SORTS}
+            />
+          )}
         <div className="interactions">
           <ButtonWithLoading
             isLoading={isLoading}
