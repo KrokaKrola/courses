@@ -4,6 +4,9 @@ import './App.css';
 import Search from './Search.js';
 import Table from './Table';
 import Button from './Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { sortBy } from 'lodash';
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_HPP = '10';
@@ -14,8 +17,41 @@ const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
 const PARAM_HPP = 'hitsPerPage=';
 
+const SORTS = {
+  NONE: list => list,
+  TITLE: list => sortBy(list, 'title'),
+  AUTHOR: list => sortBy(list, 'author'),
+  COMMENTS: list => sortBy(list, 'num_comments').reverse(),
+  POINTS: list => sortBy(list, 'points').reverse()
+};
+
 // const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}&${PARAM_PAGE}`;
 // console.log(url);
+
+const Loading = () => {
+  return <FontAwesomeIcon icon={faSpinner} spin />;
+};
+
+// HOC component
+const withLoading = Component => ({ isLoading, ...rest }) =>
+  isLoading ? <Loading /> : <Component {...rest}></Component>;
+
+// HOF
+const updateSearchTopStoriesState = (hits, page) => (prevState) => {
+  const { searchKey, results } = prevState;
+  const oldHits =
+    results && results[searchKey] ? results[searchKey].hits : [];
+  const updatedHits = [...oldHits, ...hits];
+  return {
+    results: {
+      ...results,
+      [searchKey]: { hits: updatedHits, page }
+    },
+    isLoading: false
+  }
+}
+
+const ButtonWithLoading = withLoading(Button);
 
 export default class extends Component {
   constructor(props) {
@@ -25,7 +61,8 @@ export default class extends Component {
       results: null,
       searchKey: '',
       searchTerm: DEFAULT_QUERY,
-      error: null
+      error: null,
+      isLoading: false
     };
 
     this.needToSearchTopStories = this.needToSearchTopStories.bind(this);
@@ -34,6 +71,7 @@ export default class extends Component {
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
+
   }
 
   needToSearchTopStories(searchTerm) {
@@ -42,16 +80,11 @@ export default class extends Component {
 
   setSearchTopStories(result) {
     const { hits, page } = result;
-    const { searchKey, results } = this.state;
-    const oldHits =
-      results && results[searchKey] ? results[searchKey].hits : [];
-    const updatedHits = [...oldHits, ...hits];
-    this.setState({
-      results: { ...results, [searchKey]: { hits: updatedHits, page } }
-    });
+    this.setState(updateSearchTopStoriesState(hits, page))
   }
 
   fetchSearchTopStories(searchTerm, page = 0) {
+    this.setState({ isLoading: true });
     axios(
       `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`
     )
@@ -66,7 +99,6 @@ export default class extends Component {
     this.setState({ searchKey: searchTerm });
     this.fetchSearchTopStories(searchTerm);
   }
-
 
   onDismiss(id) {
     const { searchKey, results } = this.state;
@@ -92,15 +124,19 @@ export default class extends Component {
   }
 
   render() {
-    const { searchTerm, results, searchKey, error } = this.state;
+    const {
+      searchTerm,
+      results,
+      searchKey,
+      error,
+      isLoading
+    } = this.state;
     const page =
       (results && results[searchKey] && results[searchKey].page) || 0;
     const list =
       (results && results[searchKey] && results[searchKey].hits) || [];
-    const test = '';
     return (
       <div className="page">
-        {test}
         <div className="interactions">
           <Search
             searchTerm={searchTerm}
@@ -115,14 +151,19 @@ export default class extends Component {
             <p>{error}</p>
           </div>
         ) : (
-          <Table list={list} onDismiss={this.onDismiss} />
-        )}
+            <Table
+              list={list}
+              onDismiss={this.onDismiss}
+              sortsFunctions={SORTS}
+            />
+          )}
         <div className="interactions">
-          <Button
+          <ButtonWithLoading
+            isLoading={isLoading}
             onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
           >
             More
-          </Button>
+          </ButtonWithLoading>
         </div>
       </div>
     );
