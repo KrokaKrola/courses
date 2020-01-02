@@ -10,34 +10,42 @@ import User from "app/User"
 import NotFound from "app/NotFound"
 
 export default function LoggedIn() {
-  const user = null
+  const [{ user, auth }, dispatch] = useAppState()
+
+  useEffect(() => {
+    if (!user) {
+      fetchUser(auth.uid).then(user => {
+        dispatch("LOG_IN_USER", user)
+      })
+    }
+  }, [user, auth.uid, dispatch])
 
   return user ? (
     <Fragment>
-      <TopBar />
+      <TopBar/>
       <div className="Main">
         <Router>
           <Route path=".">
-            <Dashboard />
+            <Dashboard/>
           </Route>
           <Route
             path=":uid/:date"
             matchState={state => state && state.fromCalendar}
             validate={hasValidDateParam}
           >
-            <Dashboard />
+            <Dashboard/>
           </Route>
           <Route path=":uid/:date" validate={hasValidDateParam}>
-            <UserDatePosts />
+            <UserDatePosts/>
           </Route>
           <Route path=":uid">
-            <User />
+            <User/>
           </Route>
           <Route path="feed">
-            <Feed />
+            <Feed/>
           </Route>
           <DefaultRoute>
-            <NotFound />
+            <NotFound/>
           </DefaultRoute>
         </Router>
       </div>
