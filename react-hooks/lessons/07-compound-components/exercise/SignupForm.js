@@ -4,7 +4,7 @@ import { FaDumbbell } from "react-icons/fa"
 
 import { signup } from "app/utils"
 import TabsButton from "app/TabsButton"
-import DateFields, { MonthField, DayField, YearField } from "app/DateFields"
+import DateFields, { DataDateFields, MonthField, DayField, YearField } from "app/DateFields"
 
 function TextInput({ id, label, type = "text" }) {
   return (
@@ -12,7 +12,7 @@ function TextInput({ id, label, type = "text" }) {
       <VisuallyHidden>
         <label htmlFor={id}>{label}</label>
       </VisuallyHidden>
-      <input id={id} placeholder={label} type={type} required />
+      <input id={id} placeholder={label} type={type} required/>
     </Fragment>
   )
 }
@@ -39,7 +39,12 @@ export default function SignupForm() {
       setError(error)
     }
   }
-
+  const data = {
+    value: startDate,
+    onChange: setStartDate,
+    start: 2018,
+    end: 2019
+  }
   return (
     <div>
       {error && (
@@ -52,21 +57,27 @@ export default function SignupForm() {
       )}
 
       <form onSubmit={handleSignup}>
-        <TextInput id="displayName" label="Display Name" />
-        <TextInput id="photoURL" label="Avatar URL" />
-        <TextInput id="email" label="Email" />
-        <TextInput id="password" label="Password" />
+        <TextInput id="displayName" label="Display Name"/>
+        <TextInput id="photoURL" label="Avatar URL"/>
+        <TextInput id="email" label="Email"/>
+        <TextInput id="password" label="Password"/>
         <p>
           <span>Start:</span>{" "}
-          <DateFields
-            value={startDate}
-            onChange={setStartDate}
-            start={2018}
-            end={2019}
-          />
+          {/*<DataDateFields data={data}/>*/}
+          {/*<DateFields*/}
+          {/*  value={startDate}*/}
+          {/*  onChange={setStartDate}*/}
+          {/*  start={2018}*/}
+          {/*  end={2019}*/}
+          {/*/>*/}
+          <DateFields value={startDate} onChange={setStartDate} >
+            <DayField aria-label="Start Day" />
+            <MonthField aria-label="Start Month" />
+            <YearField start={2018} end={2029} />
+          </DateFields>
         </p>
         <TabsButton>
-          <FaDumbbell />
+          <FaDumbbell/>
           <span>{loading ? "Loading..." : "Sign Up"}</span>
         </TabsButton>
       </form>

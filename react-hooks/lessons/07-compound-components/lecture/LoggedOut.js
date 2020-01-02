@@ -67,22 +67,10 @@ export default function LoggedOut() {
   ]
 
   return (
-    <div className="LoggedOut">
+    <div className="LoggedOut test">
       <About />
 
-      <Tabs>
-        <TabList>
-          <Tab>Login</Tab>
-          <Tab>Signup</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <LoginForm />
-          </TabPanel>
-          <TabPanel>
-            <SignupForm />
-          </TabPanel>
-        </TabPanels>
+      <Tabs data={tabData} className='test'>
       </Tabs>
     </div>
   )
