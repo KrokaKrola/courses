@@ -7,6 +7,8 @@ export default Feed
 
 const PER_PAGE = 3
 
+let feedState = null
+
 function Feed() {
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
@@ -16,13 +18,13 @@ function Feed() {
           posts: action.posts
         }
       }
-      case 'LOAD_NEW_POSTS': {
-        return  {
+      case "LOAD_NEW_POSTS": {
+        return {
           ...state,
           newPosts: action.newPosts
         }
       }
-      case 'VIEW_NEW_POSTS': {
+      case "VIEW_NEW_POSTS": {
         return {
           ...state,
           posts: state.newPosts.concat(state.posts),
@@ -33,14 +35,15 @@ function Feed() {
       }
       case "VIEW_MORE": {
         return {
-          ...state, perPageAmount: action.value
+          ...state,
+          perPageAmount: state.perPageAmount + PER_PAGE
         }
       }
       default: {
         throw new Error("Error in action naming!")
       }
     }
-  }, {
+  }, feedState || {
     perPageAmount: PER_PAGE,
     posts: [],
     createdAt: Date.now(),
@@ -48,6 +51,10 @@ function Feed() {
   })
 
   const { perPageAmount, posts, createdAt, newPosts } = state
+
+  useEffect(() => {
+    feedState = state
+  })
 
   useEffect(() => {
     let loading = true
@@ -59,17 +66,17 @@ function Feed() {
 
   useEffect(() => {
     return subscribeToNewFeedPosts(createdAt, posts => {
-      dispatch({type: 'LOAD_NEW_POSTS', newPosts: posts})
+      dispatch({ type: "LOAD_NEW_POSTS", newPosts: posts })
     })
-  }, [createdAt]);
+  }, [createdAt])
 
 
   const handleViewMore = () => {
-    dispatch({ type: "VIEW_MORE", value: perPageAmount + PER_PAGE })
+    dispatch({ type: "VIEW_MORE" })
   }
 
   const handleViewNewPosts = () => {
-    dispatch({type: 'VIEW_NEW_POSTS'})
+    dispatch({ type: "VIEW_NEW_POSTS" })
   }
 
   return (
@@ -90,7 +97,6 @@ function Feed() {
                 onClick={handleViewMore}>View More
         </button>
       </div>
-      )
     </div>
   )
 }
